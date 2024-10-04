@@ -16,6 +16,7 @@
             align-items: center;
             height: 100vh;
             text-align: center;
+            transition: background-color 0.3s, color 0.3s; /* Transição suave */
         }
         .container {
             background-color: white;
@@ -23,9 +24,12 @@
             border-radius: 10px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
             max-width: 400px;
-            width: 90%; /* Altera a largura para ser responsiva */
+            width: 90%;
             box-sizing: border-box;
             flex-grow: 1;
+            overflow: auto; /* Permite rolagem */
+            max-height: 80vh; /* Altura máxima para a barra de rolagem */
+            transition: background-color 0.3s; /* Transição suave para o fundo do container */
         }
         h1 {
             color: #3498db;
@@ -90,6 +94,33 @@
             color: #7f8c8d;
             margin-top: 20px;
         }
+        /* Estilos para a paleta de cores */
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .color-button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+        .color-button:hover {
+            transform: scale(1.1);
+        }
+        .color-light {
+            background-color: #f0f4f8;
+        }
+        .color-dark {
+            background-color: #34495e;
+        }
+        .color-blue {
+            background-color: #3498db;
+        }
         /* Responsividade */
         @media (max-width: 768px) {
             h1 {
@@ -124,6 +155,14 @@
 
 <div class="container">
     <h1>Gerador de QR Code</h1>
+    
+    <!-- Paleta de Cores -->
+    <div class="color-palette">
+        <button class="color-button color-light" onclick="changeBackgroundColor('#f0f4f8')"></button>
+        <button class="color-button color-dark" onclick="changeBackgroundColor('#34495e')"></button>
+        <button class="color-button color-blue" onclick="changeBackgroundColor('#3498db')"></button>
+    </div>
+
     <input type="text" id="input-url" placeholder="Digite a URL (https://...)" />
     <button onclick="generateQRCode()">Gerar QR Code</button>
     
@@ -178,6 +217,10 @@
             link.download = 'qrcode.png';
             link.click();
         }
+    }
+
+    function changeBackgroundColor(color) {
+        document.body.style.backgroundColor = color; // Muda a cor de fundo
     }
 </script>
 
