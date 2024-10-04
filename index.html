@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de QR Code para Links</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%; /* Altera a largura para ser responsiva */
+            box-sizing: border-box;
+            flex-grow: 1;
+        }
+        h1 {
+            color: #3498db;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            border-color: #2980b9;
+            outline: none;
+        }
+        button {
+            padding: 15px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.2s;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(1);
+        }
+        #qrcode {
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .message {
+            margin-top: 10px;
+            color: #2ecc71;
+            font-size: 18px;
+            display: none;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        footer {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 20px;
+            }
+            input[type="text"], button {
+                font-size: 16px;
+                padding: 12px;
+            }
+            .message {
+                font-size: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 18px;
+            }
+            input[type="text"], button {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .message {
+                font-size: 14px;
+            }
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gerador de QR Code</h1>
+    <input type="text" id="input-url" placeholder="Digite a URL (https://...)" />
+    <button onclick="generateQRCode()">Gerar QR Code</button>
+    
+    <div id="qrcode"></div>
+    <div class="message" id="message">QR Code gerado com sucesso!</div>
+    <button id="download-btn" style="display:none;" onclick="downloadQRCode()">Baixar QR Code</button>
+</div>
+
+<footer>&copy; 2024 Seu Nome | Ferramenta de QR Code</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    function generateQRCode() {
+        const url = document.getElementById('input-url').value;
+        const qrCodeContainer = document.getElementById('qrcode');
+        const message = document.getElementById('message');
+        const downloadBtn = document.getElementById('download-btn');
+
+        // Limpar o QR Code anterior
+        qrCodeContainer.innerHTML = "";
+        qrCodeContainer.style.display = 'none';
+        message.style.display = 'none';
+        downloadBtn.style.display = 'none';
+
+        // Verificar se a URL é válida
+        if (url && url.startsWith('http')) {
+            // Gerar QR Code com a URL
+            new QRCode(qrCodeContainer, {
+                text: url,
+                width: 256,
+                height: 256,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            // Exibir o QR Code, mensagem e botão de download
+            qrCodeContainer.style.display = 'block';
+            message.style.display = 'block';
+            downloadBtn.style.display = 'block';
+        } else {
+            alert('Por favor, insira uma URL válida que comece com "http" ou "https".');
+        }
+    }
+
+    function downloadQRCode() {
+        const qrCodeContainer = document.getElementById('qrcode').getElementsByTagName('img')[0];
+
+        if (qrCodeContainer) {
+            const link = document.createElement('a');
+            link.href = qrCodeContainer.src;
+            link.download = 'qrcode.png';
+            link.click();
+        }
+    }
+</script>
+
+</body>
+</html>
